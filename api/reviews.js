@@ -1,5 +1,5 @@
 import axios from 'axios';
-//force update
+
 const allowCors = (fn) => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,10 +28,27 @@ const handler = async (req, res) => {
     }
 
     res.setHeader('Cache-Control', 's-maxage=' + 24 * 60 * 60); // 24hours
-    const result = await axios.get(
+
+    const firstPageResult = await axios.get(
       `https://serpapi.com/search.json?api_key=2393b9c19088d144a773f7a8b64e79d136826097f7a58a4f786e6b6a226fdeb1&data_id=${dataId}&engine=google_maps_reviews&hl=en`
     );
-    res.status(200).json(result.data);
+
+    let reviews = firstPageResult.data.reviews;
+    let nextPage = firstPageResult.data.serpapi_pagination?.next;
+    let counter = 0;
+
+    while (nextPage && counter < 3) {
+      const newPageResult = await axios.get(
+        `${nextPage}&api_key=2393b9c19088d144a773f7a8b64e79d136826097f7a58a4f786e6b6a226fdeb1`
+      );
+      if (newPageResult.data.reviews) {
+        reviews = [...reviews, ...newPageResult.data.reviews];
+      }
+      nextPage = newPageResult.data.serpapi_pagination?.next;
+      counter++;
+    }
+
+    res.status(200).json(reviews);
   } catch (e) {
     res.status(403);
   }
