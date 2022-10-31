@@ -27,7 +27,7 @@ const handler = async (req, res) => {
       return;
     }
 
-    res.setHeader('Cache-Control', 's-maxage=' + 24 * 60 * 60); // 24hours
+    res.setHeader('Cache-Control', 's-maxage=' + 3 * 24 * 60 * 60); // 24hours
 
     const firstPageResult = await axios.get(
       `https://serpapi.com/search.json?api_key=2393b9c19088d144a773f7a8b64e79d136826097f7a58a4f786e6b6a226fdeb1&data_id=${dataId}&engine=google_maps_reviews&hl=en`
