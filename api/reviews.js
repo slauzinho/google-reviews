@@ -30,7 +30,7 @@ const handler = async (req, res) => {
     res.setHeader('Cache-Control', 's-maxage=' + 3 * 24 * 60 * 60); // 24hours
 
     const firstPageResult = await axios.get(
-      `https://serpapi.com/search.json?api_key=2393b9c19088d144a773f7a8b64e79d136826097f7a58a4f786e6b6a226fdeb1&data_id=${dataId}&engine=google_maps_reviews&hl=en`
+      `https://serpapi.com/search.json?api_key=a4edaa2d61c6218a3509f155b67aeebc09bffad84edef2809825c22463041ad3&data_id=${dataId}&engine=google_maps_reviews&hl=en`
     );
 
     let reviews = firstPageResult.data.reviews;
@@ -39,7 +39,7 @@ const handler = async (req, res) => {
 
     while (nextPage && counter < 3) {
       const newPageResult = await axios.get(
-        `${nextPage}&api_key=2393b9c19088d144a773f7a8b64e79d136826097f7a58a4f786e6b6a226fdeb1`
+        `${nextPage}&api_key=a4edaa2d61c6218a3509f155b67aeebc09bffad84edef2809825c22463041ad3`
       );
       if (newPageResult.data.reviews) {
         reviews = [...reviews, ...newPageResult.data.reviews];
